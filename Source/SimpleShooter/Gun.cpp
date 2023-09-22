@@ -4,6 +4,7 @@
 #include "Gun.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "Kismet/GameplayStatics.h"
+#include "DrawDebugHelpers.h"
 
 // Sets default values
 AGun::AGun()
@@ -19,6 +20,30 @@ AGun::AGun()
 
 }
 
+void AGun::PullTrigger(){
+	UGameplayStatics::SpawnEmitterAttached(MuzzleFlash, Mesh, TEXT("MuzzleFlashSocket"));
+
+	APawn* OwnerPawn = Cast<APawn>(GetOwner());
+	if(!OwnerPawn) return;
+
+	AController* OwnerController = OwnerPawn->GetController();
+	if(!OwnerController) return;
+
+	FVector PlayerLocation;
+	FRotator PlayerRotation;
+	OwnerController->GetPlayerViewPoint(PlayerLocation, PlayerRotation);
+
+	FVector End = PlayerLocation + PlayerRotation.Vector() * MaxRange;
+	//TOO: LineTrace
+
+	FHitResult HitResult;
+	bool success = GetWorld()->LineTraceSingleByChannel(HitResult, PlayerLocation, End, ECollisionChannel::ECC_GameTraceChannel1);
+	if(success) {
+		FVector ShotDirection = -PlayerRotation.Vector();
+		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ImpactEffect, HitResult.Location, ShotDirection.Rotation());
+	}
+}
+
 // Called when the game starts or when spawned
 void AGun::BeginPlay()
 {
@@ -31,8 +56,4 @@ void AGun::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-}
-
-void AGun::PullTrigger(){
-	UGameplayStatics::SpawnEmitterAttached(MuzzleFlash, Mesh, TEXT("MuzzleFlashSocket"));
 }
