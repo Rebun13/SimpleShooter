@@ -77,4 +77,8 @@ void AShooterCharacter::LookRightRate(float AxisValue) {
 void AShooterCharacter::ShootGun() {
 	Gun->PullTrigger();
 }
+
+bool AShooterCharacter::IsDead() const {
+	return Health <= 0;
+}
  
