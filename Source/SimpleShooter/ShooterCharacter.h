@@ -32,6 +32,7 @@ public:
 
 	UFUNCTION(BlueprintPure)
 	bool IsDead() const;
+	void ShootGun();
 
 private:
 	void MoveForward(float AxisValue);
@@ -48,8 +49,6 @@ private:
 
 	UPROPERTY()
 	AGun* Gun;
-
-	void ShootGun();
 
 	UPROPERTY(EditDefaultsOnly)
 	float MaxHealth = 100.f;
