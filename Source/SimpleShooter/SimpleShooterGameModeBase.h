@@ -1,4 +1,4 @@
-// Copyright Epic Games, Inc. All Rights Reserved.
+// Copyright Epic Games Inc All Rights Reserved
 
 #pragma once
 
@@ -6,12 +6,14 @@
 #include "GameFramework/GameModeBase.h"
 #include "SimpleShooterGameModeBase.generated.h"
 
-/**
- * 
- */
+/*
+*
+*/
 UCLASS()
-class SIMPLESHOOTER_API ASimpleShooterGameModeBase : public AGameModeBase
+class SIMPLESHOOTER_API ASimpleShooterGameModeBase : public AGameModeBase 
 {
-	GENERATED_BODY()
-	
+    GENERATED_BODY()
+
+public:
+    virtual void PawnKilled(APawn* Pawn);
 };
