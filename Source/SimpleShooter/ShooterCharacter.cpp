@@ -19,12 +19,13 @@ void AShooterCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
+	Health = MaxHealth;
+
 	Gun = GetWorld()->SpawnActor<AGun>(GunClass);
 	GetMesh()->HideBoneByName(TEXT("weapon_r"), EPhysBodyOp::PBO_None);
 	Gun->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform,TEXT("weaponSocket"));
 	Gun->SetOwner(this);
 
-	Health = MaxHealth;
 }
 
 // Called every frame
@@ -53,7 +54,7 @@ void AShooterCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 float AShooterCharacter::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) {
 	float DamageApplied = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 	if(Health > 0) {
-		Health = Health > DamageApplied ? Health - DamageApplied : 0;
+		Health = Health > DamageApplied ? Health - DamageApplied : 0.f;
 	}
 	UE_LOG(LogTemp, Warning, TEXT("Current Health: %f"), Health);
 
@@ -90,7 +91,7 @@ void AShooterCharacter::ShootGun() {
 }
 
 bool AShooterCharacter::IsDead() const {
-	return Health <= 0;
+	return Health <= 0.f;
 }
 
 float AShooterCharacter::GetHealthPercent() const
